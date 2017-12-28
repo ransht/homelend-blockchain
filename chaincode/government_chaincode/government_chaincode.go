@@ -59,21 +59,49 @@ func (t *HomelendChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response
 	fmt.Println(fmt.Printf("Access log %s %s", identity, mspid))
 
 	if function == "query" {
+		numOfArgsResult := t.validateNumOfArgs(stub, args, 1)
+		if len(numOfArgsResult) > 0 {
+			return shim.Error(numOfArgsResult)
+		}
 
 		return t.query(stub, args[0], args[1])
 	} else if function == "checkHouseOwner" {
+		numOfArgsResult := t.validateNumOfArgs(stub, args, 1)
+		if len(numOfArgsResult) > 0 {
+			return shim.Error(numOfArgsResult)
+		}
+
 		request := getRequest(args[0])
 		return t.checkHouseOwner(stub, request)
 	} else if function == "checkLien" {
+		numOfArgsResult := t.validateNumOfArgs(stub, args, 1)
+		if len(numOfArgsResult) > 0 {
+			return shim.Error(numOfArgsResult)
+		}
+
 		request := getRequest(args[0])
 		return t.checkLien(stub, request)
 	} else if function == "checkWarningShot" {
+		numOfArgsResult := t.validateNumOfArgs(stub, args, 1)
+		if len(numOfArgsResult) > 0 {
+			return shim.Error(numOfArgsResult)
+		}
+
 		request := getRequest(args[0])
 		return t.checkWarningShot(stub, request)
 	}
 
 	fmt.Println("invoke did not find func: " + function) //error
 	return shim.Error("Received unknown function invocation")
+}
+
+func (t *HomelendChaincode) validateNumOfArgs(stub shim.ChaincodeStubInterface, args []string, count int) string {
+	if len(args) != count {
+		str := fmt.Sprintf("Incorrect number of arguments %d.", len(args))
+		fmt.Println(str)
+		return str
+	}
+	return ""
 }
 
 func (t *HomelendChaincode) query(stub shim.ChaincodeStubInterface, arg1 string, arg2 string) pb.Response {

@@ -1,20 +1,20 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+
+	"github.com/hyperledger/fabric/core/chaincode/lib/cid"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
-	"bytes"
-	"github.com/hyperledger/fabric/core/chaincode/lib/cid"
 )
 
 // REQUEST STATUSES
-const REQUEST_INITIALIZED = 1;
-const REQUEST_CREDIT_SCORE = 2;
-const REQUEST_CREDIT_SCORE_CONFIRMED = 3;
-const REQUEST_CREDIT_SCORE_DECLINED = 4;
-
+const REQUEST_INITIALIZED = 1
+const REQUEST_CREDIT_SCORE = 2
+const REQUEST_CREDIT_SCORE_CONFIRMED = 3
+const REQUEST_CREDIT_SCORE_DECLINED = 4
 
 type HomelendChaincode struct {
 }
@@ -182,7 +182,7 @@ func (t *HomelendChaincode) advertise(stub shim.ChaincodeStubInterface, args []s
 
 	if dataAsBytes == nil {
 		fmt.Println("Does not have houses. Creating first one")
-		var arrayOfData []*Property;
+		var arrayOfData []*Property
 		arrayOfData = append(arrayOfData, data)
 
 		dataJSONasBytes, err := json.Marshal(arrayOfData)
@@ -199,10 +199,10 @@ func (t *HomelendChaincode) advertise(stub shim.ChaincodeStubInterface, args []s
 			return shim.Error(str)
 		}
 
-		fmt.Println("Sucessfully executed");
+		fmt.Println("Sucessfully executed")
 	} else {
 		fmt.Println("Already has houses. Appending one")
-		var arrayOfData []*Property;
+		var arrayOfData []*Property
 		err = json.Unmarshal(dataAsBytes, &arrayOfData)
 
 		if err != nil {
@@ -226,7 +226,7 @@ func (t *HomelendChaincode) advertise(stub shim.ChaincodeStubInterface, args []s
 }
 
 func (t *HomelendChaincode) buy(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-	return shim.Success(nil);
+	return shim.Success(nil)
 }
 
 func (t *HomelendChaincode) getProperties(stub shim.ChaincodeStubInterface) pb.Response {
@@ -349,7 +349,7 @@ func (t *HomelendChaincode) registerAsBank(stub shim.ChaincodeStubInterface, arg
 	}
 
 	if dataAsBytes == nil {
-		var bankList []*Bank;
+		var bankList []*Bank
 		bankList = append(bankList, data)
 
 		bankListasBytes, err := json.Marshal(bankList)
@@ -361,7 +361,7 @@ func (t *HomelendChaincode) registerAsBank(stub shim.ChaincodeStubInterface, arg
 
 		err = stub.PutState("bank_list", bankListasBytes)
 	} else {
-		var bankList []*Bank;
+		var bankList []*Bank
 
 		// todo: check for existing bank with hash
 
@@ -384,7 +384,7 @@ func (t *HomelendChaincode) registerAsBank(stub shim.ChaincodeStubInterface, arg
 		err = stub.PutState("bank_list", bankListasBytes)
 	}
 
-	return shim.Success(nil);
+	return shim.Success(nil)
 }
 
 func (t *HomelendChaincode) registerAsSeller(stub shim.ChaincodeStubInterface, args []string) pb.Response {
@@ -442,7 +442,7 @@ func (t *HomelendChaincode) registerAsSeller(stub shim.ChaincodeStubInterface, a
 	}
 
 	if dataAsBytes == nil {
-		var sellerList []*Seller;
+		var sellerList []*Seller
 		sellerList = append(sellerList, data)
 
 		listasBytes, err := json.Marshal(sellerList)
@@ -454,7 +454,7 @@ func (t *HomelendChaincode) registerAsSeller(stub shim.ChaincodeStubInterface, a
 
 		err = stub.PutState("seller_list", listasBytes)
 	} else {
-		var sellerList []*Seller;
+		var sellerList []*Seller
 		err = json.Unmarshal(dataAsBytes, &sellerList)
 		if err != nil {
 			str := fmt.Sprintf("Could not marshal %+v", err.Error())
@@ -473,7 +473,7 @@ func (t *HomelendChaincode) registerAsSeller(stub shim.ChaincodeStubInterface, a
 		err = stub.PutState("seller_list", listAsBytes)
 	}
 
-	return shim.Success(nil);
+	return shim.Success(nil)
 }
 
 // ===================================================================================
